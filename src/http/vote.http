@@ -1,0 +1,29 @@
+@baseURL = http://localhost:3000
+
+###
+# Get votes
+GET {{baseURL}}/vote
+
+###
+# Get vote candidates
+GET {{baseURL}}/vote/award-winning
+
+###
+# Get vote leaderboard
+GET {{baseURL}}/vote/leaderboard?password=vnmg-ranking-backend
+
+###
+# Submit a vote
+POST {{baseURL}}/vote
+Content-Type: application/json
+
+{
+  "favoriteAdaptations": ["a0cb3c80-8a83-4014-89e5-c9bd7c6a354d"],
+  "favoriteAwardWinnings": ["6df29d13-2dab-4ca6-a0b5-74070abf3e1d"],
+  "favoriteMonthlyPublisheds": ["6df29d13-2dab-4ca6-a0b5-74070abf3e1d"],
+  "favoriteRecommendeds": ["657c948d-6682-4559-aba7-741fbfed6730"],
+  "userInfo": {
+    "gender": "male",
+    "age": 23
+  }
+}

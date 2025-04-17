@@ -1,0 +1,33 @@
+# Use Node 18 LTS (more recent, supported version)
+FROM node:18-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files first (better layer caching)
+# This allows Docker to cache the npm install step as long as
+# package.json and package-lock.json don't change
+COPY package.json package-lock.json* ./
+
+# Install dependencies
+# Removed legacy-peer-deps flag which can mask dependency issues
+# Added --no-cache and --no-audit for faster builds
+RUN npm install --no-cache --no-audit
+
+# Copy the rest of the application code
+# This is done after npm install to take advantage of Docker's layer caching
+COPY . .
+
+# Set environment variables
+ENV NODE_ENV=development
+ENV PORT=3000
+
+# Add healthcheck to ensure container is operating correctly
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget -q -O - http://localhost:3000/health || exit 1
+
+# Expose port
+EXPOSE 3000
+
+# Use npm script to start development server with hot reloading
+CMD ["npm", "run", "dev"]

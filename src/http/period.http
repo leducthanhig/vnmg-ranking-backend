@@ -1,0 +1,29 @@
+@baseURL = http://localhost:3000
+
+###
+# Get all periods
+GET {{baseURL}}/period
+
+###
+# Get active periods
+GET {{baseURL}}/period/active
+
+###
+# Create a new period
+POST {{baseURL}}/period?password=vnmg-ranking-backend
+Content-Type: application/json
+
+{
+  "id": "2025-04",
+  "periodName": "April, 2025",
+  "startDate": "2025-04-01",
+  "endDate": "2025-04-30",
+  "isActive": "true"
+}
+
+###
+# Toggle period status
+PATCH {{baseURL}}/period/2025-04?password=vnmg-ranking-backend
+Content-Type: application/x-www-form-urlencoded
+
+isActive=false
