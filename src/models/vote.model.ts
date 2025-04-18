@@ -44,9 +44,9 @@ class Vote extends TimeStamps {
     period?: string,
     top?: number,
   ) {
-    const count = await this.countDocuments({});
-    const gender = await this.aggregate(getUserInfoAggregate('userInfo.gender'));
-    const age = await this.aggregate(getUserInfoAggregate('userInfo.age'));
+    const count = await this.countDocuments(period ? { period: period } : {});
+    const gender = await this.aggregate(getUserInfoAggregate('userInfo.gender', period));
+    const age = await this.aggregate(getUserInfoAggregate('userInfo.age', period));
     const results: any = {};
     switch (type) {
       case MangaType.ADAPTATION:
@@ -114,7 +114,8 @@ const getMangaAggrerate = (field: string, limit: number, page: number, period?: 
   { $limit: limit },
 ];
 
-const getUserInfoAggregate = (field: string): PipelineStage[] => [
+const getUserInfoAggregate = (field: string, period?: string): PipelineStage[] => [
+  ...(period ? [{ $match: { period: period } }] : []),
   {
     $unwind: {
       path: `$${field}`,
