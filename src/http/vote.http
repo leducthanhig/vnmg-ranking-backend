@@ -2,7 +2,7 @@
 
 ###
 # Get votes
-GET {{baseURL}}/vote
+GET {{baseURL}}/vote?period=
 
 ###
 # Get vote candidates
@@ -10,7 +10,7 @@ GET {{baseURL}}/vote/award-winning
 
 ###
 # Get vote leaderboard
-GET {{baseURL}}/vote/leaderboard?password=vnmg-ranking-backend
+GET {{baseURL}}/vote/leaderboard?password=vnmg-ranking-backend&period=&top=
 
 ###
 # Submit a vote
@@ -18,12 +18,13 @@ POST {{baseURL}}/vote
 Content-Type: application/json
 
 {
-  "favoriteAdaptations": ["a0cb3c80-8a83-4014-89e5-c9bd7c6a354d"],
-  "favoriteAwardWinnings": ["6df29d13-2dab-4ca6-a0b5-74070abf3e1d"],
-  "favoriteMonthlyPublisheds": ["6df29d13-2dab-4ca6-a0b5-74070abf3e1d"],
-  "favoriteRecommendeds": ["657c948d-6682-4559-aba7-741fbfed6730"],
+  "favoriteAdaptations": ["2afbc2cb-cf38-4562-9d1a-315f5b0c0cfe", "5c46e237-042d-41cf-b127-7f767054c1e7"],
+  "favoriteAwardWinnings": ["ad06790a-01e3-400c-a449-0ec152d6756a", "c753ba3c-d403-4af8-80e6-f453e2f9b591"],
+  "favoriteMonthlyPublisheds": ["233d5273-7153-4b6c-8b03-baa045c10c88", "d5fc7efb-2d28-490f-bb0e-2c8aefdd6b85"],
+  "favoriteRecommendeds": ["c8aebcc7-678e-4682-a727-48febbc325fd"],
   "userInfo": {
     "gender": "male",
     "age": 23
-  }
+  },
+  "token": "10000000-aaaa-bbbb-cccc-000000000001"
 }
