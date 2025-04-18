@@ -19,7 +19,7 @@ class Vote extends TimeStamps {
   public ua?: string;
 
   @prop({ required: true })
-  public periodId!: string;
+  public period!: string;
 
   @prop({ type: String, required: true })
   public favoriteAdaptations!: string[];

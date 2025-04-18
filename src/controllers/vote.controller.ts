@@ -103,7 +103,7 @@ export default class VoteController {
       await VoteModel.create({
         ip: req.ip,
         ua: userAgent,
-        periodId: currentPeriod._id,
+        period: currentPeriod._id,
         favoriteAdaptations: req.body.favoriteAdaptations,
         favoriteAwardWinnings: req.body.favoriteAwardWinnings,
         favoriteMonthlyPublisheds: req.body.favoriteMonthlyPublisheds,
