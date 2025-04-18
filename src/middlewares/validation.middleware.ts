@@ -20,7 +20,24 @@ export const ValidationMiddleware = (type: any, skipMissingProperties = false, w
         next();
       })
       .catch((errors: ValidationError[]) => {
-        const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(', ');
+        const message = errors
+          .map((error: ValidationError) => {
+            // Check if constraints exists
+            if (error.constraints) {
+              return Object.values(error.constraints);
+            }
+
+            // Handle nested validation errors
+            if (error.children && error.children.length) {
+              return error.children
+                .map(child => child.constraints ? Object.values(child.constraints) : [])
+                .flat();
+            }
+
+            return [`Invalid value for ${error.property}`];
+          })
+          .flat()
+          .join(', ');
         next(new HttpException(400, message));
       });
   };
