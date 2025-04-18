@@ -1,4 +1,5 @@
-import { ArrayMaxSize, ArrayUnique, IsIn, IsInt, IsNotEmpty, IsString, Max, Min, ValidateNested } from 'class-validator';
+import { Type } from "class-transformer";
+import { ArrayMaxSize, ArrayUnique, IsIn, IsInt, IsNotEmpty, IsString, Max, Min, ValidateNested } from "class-validator";
 
 class UserInfo {
   @IsString()
@@ -33,6 +34,7 @@ export class CreateVoteDto {
   favoriteRecommendeds: string[];
 
   @ValidateNested()
+  @Type(() => UserInfo)
   userInfo: UserInfo;
 
   @IsString()
