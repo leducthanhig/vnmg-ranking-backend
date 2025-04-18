@@ -82,10 +82,10 @@ export default class VoteController {
         return;
       }
 
-      // if (!!(await VoteModel.findOne({ ip: req.ip, periodId: currentPeriod._id }))) {
-      //   res.status(429).json({ message: 'rateLimit' });
-      //   return;
-      // }
+      if (!!(await VoteModel.findOne({ ip: req.ip, period: currentPeriod._id }))) {
+        res.status(429).json({ message: 'rateLimit' });
+        return;
+      }
 
       const invalidMangaIds = await MangaModel.validateMangaIds({
         adaptation: body.favoriteAdaptations || [],
