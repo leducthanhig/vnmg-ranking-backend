@@ -47,10 +47,8 @@ export default class VoteController {
         return;
       }
 
-      const { period, top, limit, page } = req.query;
+      const { period, top } = req.query;
       const data = await VoteModel.getLeaderBoard(
-        Number(limit) || 10,
-        Number(page) || 1,
         req.query.type as MangaType | undefined,
         period as string | undefined,
         Number(top) || undefined,

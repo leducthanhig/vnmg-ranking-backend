@@ -38,8 +38,6 @@ class Vote extends TimeStamps {
 
   public static async getLeaderBoard(
     this: ReturnModelType<typeof Vote>,
-    limit: number,
-    page: number,
     type?: MangaType,
     period?: string,
     top?: number,
@@ -50,27 +48,27 @@ class Vote extends TimeStamps {
     const results: any = {};
     switch (type) {
       case MangaType.ADAPTATION:
-        results.favoriteAdaptations = await this.aggregate(getMangaAggrerate('favoriteAdaptations', limit, page, period, top));
+        results.favoriteAdaptations = await this.aggregate(getMangaAggrerate('favoriteAdaptations', period, top));
         break;
       case MangaType.AWARD_WINNING:
-        results.favoriteAwardWinnings = await this.aggregate(getMangaAggrerate('favoriteAwardWinnings', limit, page, period, top));
+        results.favoriteAwardWinnings = await this.aggregate(getMangaAggrerate('favoriteAwardWinnings', period, top));
         break;
       case MangaType.CURRENT_MONTH:
-        results.favoriteMonthlyPublisheds = await this.aggregate(getMangaAggrerate('favoriteMonthlyPublisheds', limit, page, period, top));
+        results.favoriteMonthlyPublisheds = await this.aggregate(getMangaAggrerate('favoriteMonthlyPublisheds', period, top));
         break;
       case MangaType.RECOMMENDED:
-        results.favoriteRecommendeds = await this.aggregate(getMangaAggrerate('favoriteRecommendeds', limit, page, period, top));
+        results.favoriteRecommendeds = await this.aggregate(getMangaAggrerate('favoriteRecommendeds', period, top));
         break;
       case undefined:
-        results.favoriteAdaptations = await this.aggregate(getMangaAggrerate('favoriteAdaptations', limit, page, period, top));
-        results.favoriteAwardWinnings = await this.aggregate(getMangaAggrerate('favoriteAwardWinnings', limit, page, period, top));
-        results.favoriteMonthlyPublisheds = await this.aggregate(getMangaAggrerate('favoriteMonthlyPublisheds', limit, page, period, top));
-        results.favoriteRecommendeds = await this.aggregate(getMangaAggrerate('favoriteRecommendeds', limit, page, period, top));
+        results.favoriteAdaptations = await this.aggregate(getMangaAggrerate('favoriteAdaptations', period, top));
+        results.favoriteAwardWinnings = await this.aggregate(getMangaAggrerate('favoriteAwardWinnings', period, top));
+        results.favoriteMonthlyPublisheds = await this.aggregate(getMangaAggrerate('favoriteMonthlyPublisheds', period, top));
+        results.favoriteRecommendeds = await this.aggregate(getMangaAggrerate('favoriteRecommendeds', period, top));
         break;
       default:
         throw new Error(`Invalid manga type: ${type}`);
     }
-    return { count, gender, age, ...results };
+    return { period: period || 'all', count, gender, age, ...results };
   }
 }
 
@@ -78,8 +76,8 @@ const VoteModel = getModelForClass(Vote);
 
 export default VoteModel;
 
-const getMangaAggrerate = (field: string, limit: number, page: number, period?: string, top?: number): PipelineStage[] => [
-  ...(period !== undefined ? [{ $match: { period: period } }] : []),
+const getMangaAggrerate = (field: string, period?: string, top?: number): PipelineStage[] => [
+  ...(period ? [{ $match: { period: period } }] : []),
   {
     $unwind: {
       path: `$${field}`,
@@ -109,9 +107,7 @@ const getMangaAggrerate = (field: string, limit: number, page: number, period?: 
       manga: { $first: '$manga' },
     },
   },
-  ...(top !== undefined ? [{ $limit: top }] : []),
-  { $skip: (page - 1) * limit },
-  { $limit: limit },
+  ...(top ? [{ $limit: top }] : []),
 ];
 
 const getUserInfoAggregate = (field: string, period?: string): PipelineStage[] => [
